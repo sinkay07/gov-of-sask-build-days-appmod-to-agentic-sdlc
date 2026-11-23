@@ -8,7 +8,8 @@ nearest local guide; do not assume one file automatically overrides another.
 - `WorkItems.slnx` is the solution entry point.
 - `src/WorkItems.Api/` contains the .NET 10 minimal API, validation/CORS setup,
   domain model, and thread-safe in-memory repository.
-- `tests/WorkItems.Api.Tests/` contains the xUnit repository tests.
+- `tests/WorkItems.Api.Tests/` contains the xUnit repository tests. Control
+  time with the `StubTimeProvider` seam in `InMemoryWorkItemRepositoryTests.cs`.
 - The shared API shape is owned by
   [`../contracts/openapi.yml`](../contracts/openapi.yml).
 
