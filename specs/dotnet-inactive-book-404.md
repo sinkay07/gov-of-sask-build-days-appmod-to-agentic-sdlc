@@ -43,9 +43,9 @@ therefore not listed but can still be viewed, edited, or deleted by URL.
 ### Constraints
 
 - **Allowed paths:**
-  - `legacy-src/dotnet-bookcatalog/shared-legacy-app/src/BookCatalog.Web/Controllers/BooksController.cs`
-  - `scripts/validation/Test-BookCatalogSmoke.ps1`
-  - `specs/dotnet-inactive-book-404.md`
+    - `legacy-src/dotnet-bookcatalog/shared-legacy-app/src/BookCatalog.Web/Controllers/BooksController.cs`
+    - `scripts/validation/Test-BookCatalogSmoke.ps1`
+    - `specs/dotnet-inactive-book-404.md`
 - **Primary validation command:** `msbuild BookCatalog.sln -restore -p:Configuration=Release`
 - **Compatibility:** Routes, models, views, database schema, seed data, and the
   active-book flows are unchanged.
@@ -176,7 +176,7 @@ Stop and request human guidance if:
 
 ### Human approval
 
-- [ ] I reviewed the evidence, unresolved questions, allowed paths, acceptance
+- [x] I reviewed the evidence, unresolved questions, allowed paths, acceptance
       criteria, validation command, exclusions, risks, and stop conditions.
 - **Reviewer:** Pending human review
 - **Approval date:** Pending human review
