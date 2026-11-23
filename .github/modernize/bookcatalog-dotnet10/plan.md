@@ -53,3 +53,11 @@ This plan is a proposal subordinate to `specs/dotnet-bookcatalog-modernization.m
   new test project.
 - **Generator defaults replaced:** the tool's auto-chosen answers (Mock mode,
   no infrastructure, standard CVE scan) were replaced by the spec's decisions.
+
+## Plan approval
+
+- **Reviewer:** sinkay07
+- **Approval date:** 2026-11-23
+- **Reviewed against:** specs/dotnet-bookcatalog-modernization.md (approved commit d2fcb40)
+- **Accepted risks:** no observed pre-change IIS Express baseline; the inactive-book 404 change (issue #1) is separate; the plan was generated with app feature flags cleared for the CLI process
+
