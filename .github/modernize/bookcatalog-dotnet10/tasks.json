@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Reviewed technical tasks for BookCatalog modernization. Subordinate to specs/dotnet-bookcatalog-modernization.md; the specification wins on any conflict.",
+  "tasks": [
+    {
+      "type": "upgrade",
+      "id": "001-upgrade-dotnet10",
+      "description": "Convert BookCatalog.Web in place from ASP.NET MVC 5 on .NET Framework 4.8 with EF6 to ASP.NET Core MVC on .NET 10 with EF Core, as a single host.",
+      "reason": "Approved specification specs/dotnet-bookcatalog-modernization.md (CH-1, CH-2, CH-3).",
+      "requirements": "Work in increments, building after each: (1) convert to an SDK-style net10.0 web project that builds and produces src/BookCatalog.Web/bin/Release/net10.0/BookCatalog.Web.dll; (2) migrate hosting, routing, controllers, views, static content, validation, antiforgery and 404 behavior; (3) replace EF6 with EF Core SqlServer using DI, deterministic seed data (seven books, seed only when empty) and migrations, against a new LocalDB database named BookCatalogModernizedLab, never dropping or recreating the database at startup; (4) remove the request User-Agent diagnostic (CH-4); detailed errors only in Development (CH-5). Preserve FR-1 to FR-9. Do not add a side-by-side host, shared schema, YARP, System.Web shims, passwords, a new test project, or Azure resources. Old MDF data is not migrated.",
+      "allowedPaths": [
+        "legacy-src/dotnet-bookcatalog/shared-legacy-app/src/BookCatalog.Web/**",
+        "legacy-src/dotnet-bookcatalog/shared-legacy-app/BookCatalog.sln",
+        "legacy-src/dotnet-bookcatalog/shared-legacy-app/NuGet.Config",
+        "legacy-src/dotnet-bookcatalog/shared-legacy-app/global.json",
+        "legacy-src/dotnet-bookcatalog/shared-legacy-app/README.md",
+        "legacy-src/dotnet-bookcatalog/AGENTS.md"
+      ],
+      "validation": "pwsh scripts/validation/validate-dotnet-target.ps1 -EvidenceDirectory <temp dir>; baseline until the project is SDK-style: .\\scripts\\validation\\validate-dotnet.ps1 -Configuration Release",
+      "containment": "One commit per increment; revert the last increment if its build or smoke check fails.",
+      "stopConditions": "Any path outside allowedPaths is needed; validation fails for reasons caused by the change; LocalDB or .NET 10 SDK missing; a secret, Azure resource or destructive action is required; the smoke script contract conflicts with the spec.",
+      "environmentConfiguration": "Target framework: net10.0. .NET 10 SDK (global.json 10.0.100). Disposable LocalDB with integrated authentication.",
+      "dependencies": [],
+      "skills": [],
+      "successCriteria": {
+        "passBuild": "true"
+      }
+    },
+    {
+      "type": "security",
+      "id": "004-security-cve-remediation",
+      "description": "Check the migrated project's package references for known vulnerabilities and use patched versions.",
+      "reason": "Assessment flagged System.Data.SqlClient; the target uses Microsoft.Data.SqlClient through EF Core SqlServer.",
+      "requirements": "Limit packages to ASP.NET Core MVC, EF Core SqlServer and their tooling. Record any vulnerable package, current version, patched version and breaking-change risk. Do not add packages outside the spec's dependency rule without reapproval.",
+      "allowedPaths": [
+        "legacy-src/dotnet-bookcatalog/shared-legacy-app/src/BookCatalog.Web/**"
+      ],
+      "validation": "dotnet list legacy-src/dotnet-bookcatalog/shared-legacy-app/BookCatalog.sln package --vulnerable --include-transitive, then the primary validation command.",
+      "stopConditions": "A fix needs a package outside the dependency rule or a path outside allowedPaths.",
+      "dependencies": ["001-upgrade-dotnet10"],
+      "skills": [
+        { "name": "validate-cves-and-fix", "location": "builtin" }
+      ],
+      "successCriteria": {
+        "passBuild": "true"
+      }
+    },
+    {
+      "type": "verification",
+      "id": "005-local-verification",
+      "description": "Verify preserved behavior locally with the repository smoke script; no new test project and no Azure.",
+      "reason": "Spec acceptance criteria AC-1 to AC-8.",
+      "requirements": "Run pwsh scripts/validation/validate-dotnet-target.ps1 -EvidenceDirectory <temp dir>. It must pass the smoke checks for list, create and validation, antiforgery, edit/delete and 404, and restart persistence. Then run git grep for System.Web, EntityFramework and packages.config under the source root, scan the diff for secrets, and check git diff --name-only against the spec's allowed paths. Record any check that could not run as not run.",
+      "allowedPaths": [],
+      "validation": "pwsh scripts/validation/validate-dotnet-target.ps1 -EvidenceDirectory <temp dir>",
+      "stopConditions": "Validation cannot run, or fails because of the change; the target database exists with non-synthetic data.",
+      "cleanup": "Remove temp evidence directories and task-owned LocalDB smoke instances. Drop BookCatalogModernizedLab only if this task created it and only with user consent.",
+      "dependencies": ["001-upgrade-dotnet10", "004-security-cve-remediation"]
+    }
+  ],
+  "metadata": {
+    "planName": "bookcatalog-dotnet10",
+    "projectName": "BookCatalog",
+    "language": "dotnet",
+    "createdAt": "2026-11-23T13:12:24-06:00",
+    "reviewedAgainst": "specs/dotnet-bookcatalog-modernization.md",
+    "removedTasks": "002-setupBaseline and 003-infrastructure-azure-ready-config removed: not in the approved spec (no baseline bundle; Bicep and Azure are out of scope).",
+    "version": "1.0"
+  }
+}
