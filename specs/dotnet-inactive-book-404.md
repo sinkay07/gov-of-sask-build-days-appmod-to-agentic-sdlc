@@ -3,7 +3,7 @@
 ## Metadata
 
 - **Owner:** sinkay07
-- **Status:** Draft
+- **Status:** Approved
 - **Source root:** `legacy-src/dotnet-bookcatalog/shared-legacy-app`
 - **Related issue:** Not created
 
@@ -150,14 +150,14 @@ therefore not listed but can still be viewed, edited, or deleted by URL.
 
 ### Boundary and validation review
 
-- [ ] Evidence citations were checked against the repository.
-- [ ] Allowed paths include all anticipated implementation and test changes and
+- [x] Evidence citations were checked against the repository.
+- [x] Allowed paths include all anticipated implementation and test changes and
       nothing unrelated.
-- [ ] The primary validation command is safe, non-interactive, and runnable
+- [x] The primary validation command is safe, non-interactive, and runnable
       from the stated source root.
-- [ ] Acceptance criteria cover the required normal, failure, boundary, and
+- [x] Acceptance criteria cover the required normal, failure, boundary, and
       compatibility behavior.
-- [ ] Exclusions prevent unrelated modernization or cleanup.
+- [x] Exclusions prevent unrelated modernization or cleanup.
 
 ### Stop conditions
 
@@ -178,9 +178,9 @@ Stop and request human guidance if:
 
 - [x] I reviewed the evidence, unresolved questions, allowed paths, acceptance
       criteria, validation command, exclusions, risks, and stop conditions.
-- **Reviewer:** Pending human review
-- **Approval date:** Pending human review
-- **Approved specification commit:** Pending human review
+- **Reviewer:** sinkay07
+- **Approval date:** 2026-11-23
+- **Approved specification commit:** cd4cf52
 
 Change **Status** to `Approved` only after the checkbox is selected and the
 reviewer, date, and commit fields are complete. Planning approval authorizes
